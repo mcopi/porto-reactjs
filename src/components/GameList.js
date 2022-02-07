@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import gamesLogo from '../assets/img/valorant.jpg';
+import React, { useEffect, useContext } from 'react';
+import { ListContext } from '../ListContext';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './list.css';
 
 const GameList = () => {
 
-    const [showHover, setShow] = useState(false)
-    const [idList, setId] = useState("")
+    const { listGame, fetchStatus, setFetchStatus, functions } = useContext(ListContext)
+    const { fetchGameList } = functions
 
-    const desc = "Valorant is a tactical shooting game involving two teams with 5 players in each team. Every player can sign in and play remotely from anywhere in the world."
+    useEffect(() => {
+        if(fetchStatus === false) {
+            fetchGameList()
+            setFetchStatus(true)
+        }        
+    }, [fetchStatus, fetchGameList, setFetchStatus])
 
-    const slicedDescription = (words, total = 100) => {
+    const slicedDescription = (words, total = 110) => {
         if (words.length > total) {
             let trimmed = words.substr(0, total)
             trimmed = trimmed.substr(0, Math.min(trimmed.length, trimmed.lastIndexOf(" ")))
@@ -21,40 +27,6 @@ const GameList = () => {
         }
     }
 
-    const hoverView = (id) => {
-        return (
-            <>
-                {id && (
-                    <div className="position-absolute top-50 read-more" id={id}>
-                        <a href="/#">Read More</a>
-                    </div>
-                )}
-            </>
-        )
-    }
-
-    const hoverEffect = (x, id) => {
-        if(x) {
-            return (
-                hoverView(id)
-            )
-        } else {
-            return (
-                <></>
-            )
-        }
-    }
-
-    const mouseEnter = () => {
-        setShow(true) 
-        setId("test1")
-    }
-
-    const mouseLeave = () => {
-        setShow(false) 
-        setId("")
-    }
-
     return (
         <div className="container" id="game-list-container">
 
@@ -62,68 +34,32 @@ const GameList = () => {
                 <h2>Game List</h2>
             </div>
 
-            <div className="row justify-content-center">
-                <div className="col-10 col-md-3" >
-                    <div className="card" onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
-                        { (showHover === true && idList === "test1") ? hoverEffect(showHover, "test1")
-                        : hoverEffect(showHover) }
-                        <img src={gamesLogo} alt="logo-games" />
-                        <div className="card-body">
-                            <h4>Valorant</h4>
-                            <h6 className="fw-bold">2019</h6>
-                            <h6 className="fw-bold">FPS</h6>
-                            <p>{slicedDescription(desc)}</p>
+            <div className="row justify-content-md-start justify-content-center">
+                {listGame.map(data => {
+                    return (
+                        <div className="col-10 col-md-3" key={data.key}>
+                            <div className="card">
+                                <img src={data.imgUrl} alt="logo-games" />
+                                <div className="card-body">
+                                    <h4>{data.name}</h4>
+                                    <h6 className="fw-bold">{data.year}</h6>
+                                    <h6 className="fw-bold">{data.genre}</h6>
+                                    <p>{slicedDescription(data.desc)}</p>
+                                    <div className="my-3" id="action-button">
+                                        <div className="d-inline">
+                                            <button className="btn btn-primary btn-sm me-1"><i className="bi bi-pencil"></i></button>
+                                            <button className="btn btn-danger btn-sm"><i className="bi bi-trash"></i></button>
+                                        </div>
+                                        <div className="d-inline float-end">
+                                            <button className="btn btn-secondary btn-sm">Read More</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-
-                <div className="col-10 col-md-3">
-                    <div className="card" 
-                    onMouseEnter={() => {
-                        setShow(true) 
-                        setId("test2")}} 
-                        onMouseLeave={() => {
-                            setShow(false)
-                            setId("")}}>
-                        { (showHover === true && idList === "test2") ? hoverEffect(showHover, "test2")
-                        : hoverEffect(showHover) }
-                        <img src={gamesLogo} alt="logo-games" />
-                        <div className="card-body">
-                            <h4>Valorant</h4>
-                            <h6 className="fw-bold">2019</h6>
-                            <h6 className="fw-bold">FPS</h6>
-                            <p>{slicedDescription(desc)}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-10 col-md-3">
-                    <div className="card">
-                        <img src={gamesLogo} alt="logo-games" />
-                        <div className="card-body">
-                            <h4>Valorant</h4>
-                            <h6 className="fw-bold">2019</h6>
-                            <h6 className="fw-bold">FPS</h6>
-                            <p>{slicedDescription(desc)}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-10 col-md-3">
-                    <div className="card">
-                        <img src={gamesLogo} alt="logo-games" />
-                        <div className="card-body">
-                            <h4>Valorant</h4>
-                            <h6 className="fw-bold">2019</h6>
-                            <h6 className="fw-bold">FPS</h6>
-                            <p>{slicedDescription(desc)}</p>
-                        </div>
-                    </div>
-                </div>
+                    )
+                })}
             </div>
-
-            
         </div>
     )
 }

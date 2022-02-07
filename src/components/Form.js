@@ -1,52 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { ListContext } from '../ListContext';
 import './form.css';
 
 const Form = () => {
 
-    const [input, setInput] = useState({
-        name: "",
-        year: "",
-        genre: "",
-        type: "film",
-        imgUrl: "",
-        desc: ""
-    })
+    const { input, setInput, visibility, functions } = useContext(ListContext)
 
-    const [visibility, setVisibility] = useState(false)
+    const { submitData } = functions
 
     const handleChange = (event) => {
         let val = event.target.value
         let nama = event.target.name
 
         setInput({...input, [nama]: val})
-        console.log(input)
     }
 
     const handleSubmit = (event) => {
         event.preventDefault()
         
-        if (localStorage.getItem('data')){
-            let prevData = JSON.parse(localStorage.getItem('data'))
-            prevData.push(input)
-            localStorage.removeItem('data')
-            localStorage.setItem('data', JSON.stringify(prevData))
-        } else {
-            let newData = []
-            newData.push(input)
-            localStorage.setItem('data', JSON.stringify(newData))
-        }
-        
-        setInput({
-            name: "",
-            year: "",
-            genre: "",
-            imgUrl: "",
-            desc: ""
-        })
-
-        setVisibility(true)
-        setTimeout(() => setVisibility(false), 2000)
-
+        submitData()
     }
 
     return (

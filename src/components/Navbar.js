@@ -12,10 +12,10 @@ const Navbar = () => {
                     </button>
                     <div className="collapse navbar-collapse" id="mobileMenu">
                         <div className="navbar-nav ms-auto">
-                        <a className="nav-link active" id="news" href="/#">News</a>
-                        <a className="nav-link" id="byfilter" href="/#">By Filter</a>
-                        <a className="nav-link" id="about" href="/#">About</a>
-                        <a className="nav-link" id="contact" href="/#">Contact Us</a>
+                            <a className="nav-link active" id="news" href="/#">News</a>
+                            <a className="nav-link" id="byfilter" href="/#">By Filter</a>
+                            <a className="nav-link" id="about" href="/#">About</a>
+                            <a className="nav-link" id="contact" href="/#">Contact Us</a>
                         </div>
                     </div>
                 </div>

@@ -16,17 +16,41 @@
     padding-bottom: 0px;
 }
 
-.read-more {
-    left: 35%;
+.card {
+    min-height: 435px;
 }
 
+p {
+    margin-bottom: 0px;
+}
+
+.bi {
+    font-size: 18px;
+}
+
+.btn-secondary {
+    height: 37px;
+}
+
+#action-button {
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+}
 
 @media screen and (max-width: 576px) {
     .card {
         margin-top: 5px;
+        min-height: 0px;
     }
 
     .row img {
         height: 130px;
+    }
+
+    #action-button {
+        position: relative;
+        bottom: 0;
+        width: 100%;
     }
 }
