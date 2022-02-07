@@ -1,0 +1,32 @@
+#game-list-container {
+    margin-top: 100px;
+}
+
+.row img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.row p {
+    text-align: justify;
+}
+
+.card-body {
+    padding-bottom: 0px;
+}
+
+.read-more {
+    left: 35%;
+}
+
+
+@media screen and (max-width: 576px) {
+    .card {
+        margin-top: 5px;
+    }
+
+    .row img {
+        height: 130px;
+    }
+}
