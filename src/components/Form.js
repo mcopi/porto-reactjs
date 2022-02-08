@@ -1,5 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ListContext } from '../ListContext';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'
 import './form.css';
 
 const Form = () => {
@@ -8,10 +10,14 @@ const Form = () => {
 
     const { submitData } = functions
 
+    const [startDate, setStartDate] = useState(new Date());
+
     const handleChange = (event) => {
         let val = event.target.value
         let nama = event.target.name
+        let lengthData = JSON.parse(localStorage.getItem('data'))
 
+        input.id = lengthData.length === 0 ? 1 : lengthData[lengthData.length - 1].id + 1
         setInput({...input, [nama]: val})
     }
 
@@ -34,13 +40,19 @@ const Form = () => {
                             {visibility && (
                                 <div className="alert alert-success" role="alert">
                                     <i className="bi bi-check-circle"></i>
-                                    Message succesfully sent
+                                     Message succesfully sent
                                 </div>
                             )}
                             <div className="my-3">
                                 <label className="form-label">Name <span>*</span></label>
                                 <input type="text" name="name" className="form-control" onChange={handleChange} value={input.name} placeholder="Layangan Putus" required />
                             </div>
+                            <DatePicker selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                showYearPicker
+                                dateFormat="yyyy"
+                                className="form-control"
+                            />
                             <div className="mb-3">
                                 <label className="form-label">Year <span>*</span></label>
                                 <input type="number" name="year" className="form-control" onChange={handleChange} value={input.year} placeholder="2019" required />

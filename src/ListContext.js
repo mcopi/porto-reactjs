@@ -5,6 +5,7 @@ export const ListContext = createContext()
 export const ListProvider = props => {
 
     const [input, setInput] = useState({
+        id: "",
         name: "",
         year: "",
         genre: "",
@@ -15,33 +16,53 @@ export const ListProvider = props => {
 
     const [visibility, setVisibility] = useState(false)
     const [listGame, setListGame] = useState([])
+    const [listFilm, setListFilm] = useState([])
     const [fetchStatus, setFetchStatus] = useState(false)
 
     const submitData = () => {
+        // GET AND ADD NEW DATA
         if (localStorage.getItem('data')){
             let prevData = JSON.parse(localStorage.getItem('data'))
             prevData.push(input)
             localStorage.removeItem('data')
             localStorage.setItem('data', JSON.stringify(prevData))
-        } else {
+        } 
+
+        // ADD FIRST DATA
+        else {
             let newData = []
             newData.push(input)
             localStorage.setItem('data', JSON.stringify(newData))
         }
-        
+
+        // SET INPUT TO EMPTY
         setInput({
+            id: "",
             name: "",
             year: "",
             genre: "",
             imgUrl: "",
+            type: "film",
             desc: ""
         })
 
+        // ACTIVATING ALERT
         setVisibility(true)
         setTimeout(() => setVisibility(false), 2000)
 
+        // SET TO LIST
         if(input.type === 'film') {
+            setListFilm([...listFilm, {
+                id: input.id,
+                name: input.name,
+                year: input.year,
+                genre: input.genre,
+                imgUrl: input.imgUrl,
+                desc: input.desc
+            }])
+        } else {
             setListGame([...listGame, {
+                id: input.id,
                 name: input.name,
                 year: input.year,
                 genre: input.genre,
@@ -53,10 +74,10 @@ export const ListProvider = props => {
 
     const fetchGameList = () => {
         let data = JSON.parse(localStorage.getItem('data'))
-        let dataListGame = data.filter(x => { return x.type === 'film'})
-        setListGame(dataListGame.map((data, index) => {
+        let dataListGame = data.filter(x => { return x.type === 'game'})
+        setListGame(dataListGame.map(data => {
             return {
-                key: index+1,
+                id: data.id,
                 name: data.name,
                 year: data.year,
                 genre: data.genre,
@@ -66,14 +87,61 @@ export const ListProvider = props => {
             }
         }))
     }
+
+    const fetchFilmList = () => {
+        let data = JSON.parse(localStorage.getItem('data'))
+        let dataListGame = data.filter(x => { return x.type === 'film'})
+        setListFilm(dataListGame.map(data => {
+            return {
+                id: data.id,
+                name: data.name,
+                year: data.year,
+                genre: data.genre,
+                type: data.type,
+                imgUrl: data.imgUrl,
+                desc: data.desc
+            }
+        }))
+    }
+
+    const deleteData = (id) => {
+        let newData
+        let newLocal = JSON.parse(localStorage.getItem('data'))
+        let deletedData = newLocal.find(data => { return data.name === id })
+
+        newLocal = newLocal.filter(data => { return data.name !== id })
+
+        if (deletedData.type === 'film'){
+            newData = listFilm.filter(data => { return data.name !== id })
+            setListFilm(newData)
+        } else {
+            newData = listGame.filter(data => { return data.name !== id })
+            setListGame(newData)
+        }
+
+        localStorage.removeItem('data')
+        localStorage.setItem('data', JSON.stringify(newLocal))
+    }
+
+    const slicedDescription = (words, total = 110) => {
+        if (words.length > total) {
+            let trimmed = words.substr(0, total)
+            trimmed = trimmed.substr(0, Math.min(trimmed.length, trimmed.lastIndexOf(" ")))
+            trimmed += "..."
+            return trimmed
+        }
+        else {
+            return words
+        }
+    }
     
     const functions = {
-        submitData, fetchGameList
+        submitData, fetchGameList, fetchFilmList, deleteData, slicedDescription
     }
 
     return (
         <ListContext.Provider value={{
-            input, setInput, visibility, setVisibility, listGame, setListGame, fetchStatus, setFetchStatus, functions
+            input, setInput, visibility, setVisibility, listGame, setListGame, listFilm, setListFilm, fetchStatus, setFetchStatus, functions
         }}>
             {props.children}
         </ListContext.Provider>
