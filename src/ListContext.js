@@ -7,7 +7,7 @@ export const ListProvider = props => {
     const [input, setInput] = useState({
         id: "",
         name: "",
-        year: "",
+        year: new Date(),
         genre: "",
         type: "film",
         imgUrl: "",
@@ -39,7 +39,7 @@ export const ListProvider = props => {
         setInput({
             id: "",
             name: "",
-            year: "",
+            year: new Date(),
             genre: "",
             imgUrl: "",
             type: "film",
@@ -55,7 +55,7 @@ export const ListProvider = props => {
             setListFilm([...listFilm, {
                 id: input.id,
                 name: input.name,
-                year: input.year,
+                year: input.year.toLocaleString('ko-ID'),
                 genre: input.genre,
                 imgUrl: input.imgUrl,
                 desc: input.desc
@@ -64,7 +64,7 @@ export const ListProvider = props => {
             setListGame([...listGame, {
                 id: input.id,
                 name: input.name,
-                year: input.year,
+                year: input.year.toLocaleString('ko-ID'),
                 genre: input.genre,
                 imgUrl: input.imgUrl,
                 desc: input.desc
@@ -105,22 +105,13 @@ export const ListProvider = props => {
     }
 
     const deleteData = (id) => {
-        let newData
         let newLocal = JSON.parse(localStorage.getItem('data'))
-        let deletedData = newLocal.find(data => { return data.name === id })
-
-        newLocal = newLocal.filter(data => { return data.name !== id })
-
-        if (deletedData.type === 'film'){
-            newData = listFilm.filter(data => { return data.name !== id })
-            setListFilm(newData)
-        } else {
-            newData = listGame.filter(data => { return data.name !== id })
-            setListGame(newData)
-        }
+        newLocal = newLocal.filter(data => { return data.id !== id })
 
         localStorage.removeItem('data')
         localStorage.setItem('data', JSON.stringify(newLocal))
+
+        setFetchStatus(false)
     }
 
     const slicedDescription = (words, total = 110) => {
@@ -134,9 +125,13 @@ export const ListProvider = props => {
             return words
         }
     }
+
+    const slicedDate = (date) => {
+        return date.substring(0, 4)
+    }
     
     const functions = {
-        submitData, fetchGameList, fetchFilmList, deleteData, slicedDescription
+        submitData, fetchGameList, fetchFilmList, deleteData, slicedDescription, slicedDate
     }
 
     return (

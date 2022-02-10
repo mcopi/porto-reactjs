@@ -5,6 +5,7 @@
 .navbar-nav a {
     margin-right: 20px;
     font-size: 17px;
+    cursor: pointer;
 }
 
 .navbar-nav a:hover {

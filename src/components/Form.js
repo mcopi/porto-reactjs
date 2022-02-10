@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { ListContext } from '../ListContext';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
@@ -10,28 +10,32 @@ const Form = () => {
 
     const { submitData } = functions
 
-    const [startDate, setStartDate] = useState(new Date());
-
-    const handleChange = (event) => {
-        let val = event.target.value
-        let nama = event.target.name
+    const handleChange = event => {
+        const { name, value } = event.target
         let lengthData = JSON.parse(localStorage.getItem('data'))
-
+        
         input.id = lengthData.length === 0 ? 1 : lengthData[lengthData.length - 1].id + 1
-        setInput({...input, [nama]: val})
+        setInput({...input, [name]: value})
+        console.log(input)
     }
+
+    const converToDefEventPar = (name, value) => ({
+        target: {
+            name, value
+        }
+    })
 
     const handleSubmit = (event) => {
         event.preventDefault()
         
         submitData()
     }
-
+    
     return (
         <>
             <div className="container">
                 <div className="form-wrapper col-10 offset-1 col-md-6 offset-md-3 mb-3">
-                    <div className="text-center mb-3 mt-4">
+                    <div className="text-center mb-3 mt-4" id="form-content">
                         <h2>Form List</h2>
                     </div>
                     <form className="contact-form" onSubmit={handleSubmit}>
@@ -47,15 +51,17 @@ const Form = () => {
                                 <label className="form-label">Name <span>*</span></label>
                                 <input type="text" name="name" className="form-control" onChange={handleChange} value={input.name} placeholder="Layangan Putus" required />
                             </div>
-                            <DatePicker selected={startDate}
-                                onChange={(date) => setStartDate(date)}
+                            <div className="my-3">
+                                <label className="form-label">Year <span>*</span></label>
+                                <DatePicker
+                                onChange={date => handleChange(converToDefEventPar("year", date))}
+                                selected={input.year}
+                                name="tahun"
+                                value={input.year}
                                 showYearPicker
                                 dateFormat="yyyy"
                                 className="form-control"
-                            />
-                            <div className="mb-3">
-                                <label className="form-label">Year <span>*</span></label>
-                                <input type="number" name="year" className="form-control" onChange={handleChange} value={input.year} placeholder="2019" required />
+                                />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Genre <span>*</span></label>
