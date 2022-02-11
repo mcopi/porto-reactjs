@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Apex Legends",
+        "year": "2018-01-01T07:16:10.000Z",
+        "genre": "Battle Royal",
+        "type": "game",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/id/d/db/Apex_legends_cover.jpg",
+        "desc": "Apex Legends is the award-winning, free-to-play Hero Shooter from Respawn Entertainment. Master an ever-growing roster of legendary characters with powerful abilities, and experience strategic squad play and innovative gameplay in the next evolution of Hero Shooter and Battle Royale."
+    },
+    {
+        "id": 2,
+        "name": "Penyalin Cahaya",
+        "year": "2021-01-01T07:16:10.000Z",
+        "genre": "Crime, Mystery",
+        "type": "film",
+        "imgUrl": "https://img.celebrities.id/okz/900/k568ve/master_C9r3872JXb_476_fakta_film_penyalin_cahaya.jpg",
+        "desc": "After losing her scholarship when photos of her at a party surface online, a student pairs with a photocopy worker to piece together what happened."
+    }
+]

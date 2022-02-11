@@ -18,6 +18,7 @@ export const ListProvider = props => {
     const [listGame, setListGame] = useState([])
     const [listFilm, setListFilm] = useState([])
     const [fetchStatus, setFetchStatus] = useState(false)
+    const [isEdit, setEdit] = useState(false)
 
     const submitData = () => {
         // GET AND ADD NEW DATA
@@ -129,14 +130,46 @@ export const ListProvider = props => {
     const slicedDate = (date) => {
         return date.substring(0, 4)
     }
+
+    const submitEdit = () => {
+        const data = JSON.parse(localStorage.getItem('data'))
+        const indexData = data.findIndex(data => data.id === input.id)
+
+        data[indexData].name = input.name
+        data[indexData].type = input.type
+        data[indexData].genre = input.genre
+        data[indexData].year = input.year
+        data[indexData].desc = input.desc
+        data[indexData].imgUrl = input.imgUrl
+
+        localStorage.setItem('data', JSON.stringify(data))
+
+        const newData = JSON.parse(localStorage.getItem('data')).filter(data => {return data.type === input.type})
+        input.type === 'game' ? setListGame(newData) : setListFilm(newData)
+
+        setInput({
+            id: "",
+            name: "",
+            year: new Date(),
+            genre: "",
+            imgUrl: "",
+            type: "film",
+            desc: ""
+        })
+
+        setVisibility(true)
+        setTimeout(() => setVisibility(false), 2000)
+
+        setEdit(false)
+    }
     
     const functions = {
-        submitData, fetchGameList, fetchFilmList, deleteData, slicedDescription, slicedDate
+        submitData, fetchGameList, fetchFilmList, deleteData, slicedDescription, slicedDate, submitEdit
     }
 
     return (
         <ListContext.Provider value={{
-            input, setInput, visibility, setVisibility, listGame, setListGame, listFilm, setListFilm, fetchStatus, setFetchStatus, functions
+            input, setInput, visibility, setVisibility, listGame, setListGame, listFilm, setListFilm, fetchStatus, setFetchStatus, isEdit, setEdit, functions
         }}>
             {props.children}
         </ListContext.Provider>

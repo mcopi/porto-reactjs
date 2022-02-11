@@ -6,15 +6,21 @@ import './form.css';
 
 const Form = () => {
 
-    const { input, setInput, visibility, functions } = useContext(ListContext)
+    const { input, setInput, isEdit, visibility, functions } = useContext(ListContext)
 
-    const { submitData } = functions
+    const { submitData, submitEdit } = functions
 
     const handleChange = event => {
         const { name, value } = event.target
-        let lengthData = JSON.parse(localStorage.getItem('data'))
-        
-        input.id = lengthData.length === 0 ? 1 : lengthData[lengthData.length - 1].id + 1
+        let data = JSON.parse(localStorage.getItem('data'))
+        let lengthData = data.length
+
+        if (lengthData === 0){
+            input.id = 0
+        } else if ((lengthData !== 0) && !isEdit) {
+            input.id = data[lengthData - 1].id + 1
+        } 
+
         setInput({...input, [name]: value})
         console.log(input)
     }
@@ -28,7 +34,11 @@ const Form = () => {
     const handleSubmit = (event) => {
         event.preventDefault()
         
-        submitData()
+        if(!isEdit) {
+            submitData()
+        } else {
+            submitEdit()
+        }
     }
     
     return (
@@ -44,43 +54,58 @@ const Form = () => {
                             {visibility && (
                                 <div className="alert alert-success" role="alert">
                                     <i className="bi bi-check-circle"></i>
-                                     Message succesfully sent
+                                    {isEdit ? (<>Data succesfully added</>) : (<>Data succesfully updated</>)}
                                 </div>
                             )}
-                            <div className="my-3">
-                                <label className="form-label">Name <span>*</span></label>
-                                <input type="text" name="name" className="form-control" onChange={handleChange} value={input.name} placeholder="Layangan Putus" required />
+                            <div className="row">
+                                <div className="col-12 col-md-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">Name <span>*</span></label>
+                                        <input type="text" name="name" className="form-control" onChange={handleChange} value={input.name} placeholder="Layangan Putus" required />
+                                    </div>
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">Year <span>*</span></label>
+                                        <DatePicker
+                                        onChange={date => handleChange(converToDefEventPar("year", date))}
+                                        selected={input.year}
+                                        name="tahun"
+                                        value={input.year}
+                                        showYearPicker
+                                        dateFormat="yyyy"
+                                        className="form-control"
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="my-3">
-                                <label className="form-label">Year <span>*</span></label>
-                                <DatePicker
-                                onChange={date => handleChange(converToDefEventPar("year", date))}
-                                selected={input.year}
-                                name="tahun"
-                                value={input.year}
-                                showYearPicker
-                                dateFormat="yyyy"
-                                className="form-control"
-                                />
+
+                            <div className="row">
+                                <div className="col-12 col-md-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">Genre <span>*</span></label>
+                                        <input type="text" name="genre" className="form-control" onChange={handleChange} value={input.genre} placeholder="Action, Drama" required/>
+                                    </div>
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">Type <span>*</span></label>
+                                        <select className="form-select" name="type" onChange={handleChange} value={input.type}>
+                                            <option value="film">Film</option>
+                                            <option value="game">Game</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="mb-3">
-                                <label className="form-label">Genre <span>*</span></label>
-                                <input type="text" name="genre" className="form-control" onChange={handleChange} value={input.genre} placeholder="Action, Drama" required/>
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">Type <span>*</span></label>
-                                <select className="form-select" name="type" onChange={handleChange} value={input.type}>
-                                    <option value="film">Film</option>
-                                    <option value="game">Game</option>
-                                </select>
-                            </div>
+                            
                             <div className="mb-3">
                                 <label className="form-label">Image URL <span>*</span></label>
                                 <input type="text" name="imgUrl" className="form-control" onChange={handleChange} value={input.imgUrl} placeholder="https://contoh.com/benjody.jpg" required/>
                             </div>
+
                             <div className="mb-3">
                                 <label className="form-label">Description <span>*</span></label>
-                                <textarea name="desc" className="form-control" rows="8" onChange={handleChange} value={input.desc} placeholder="Please enter the description..." required></textarea>
+                                <textarea name="desc" className="form-control" rows="6" onChange={handleChange} value={input.desc} placeholder="Please enter the description..." required></textarea>
                             </div>
                             <div className="text-center mt-4">
                                 <button type="submit" className="btn btn-primary" id="btn-form">Submit</button>

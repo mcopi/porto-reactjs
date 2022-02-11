@@ -1,21 +1,28 @@
 import logo from '../assets/img/logo.png';
-import { Link, animateScroll as scroll } from 'react-scroll';
+import { Link } from 'react-scroll';
 import './navbar.css';
 
 const Navbar = () => {
 
-    // const handleClick = (e) => {
-    //     e.preventDefault()
-    //     let sasaran = document.getElementById(`${e.target.id}-content`)
+    const position = id => { return document.getElementById(`${id}`).offsetTop - 130 }
+    const getId = id => { return document.getElementById(`${id}`) }
 
-    //     if(e.target.id === "movielist") {
-    //         window.scroll(0, sasaran.offsetTop - 90)
-    //     } else if(e.target.id === "form") {
-    //         window.scroll(0, sasaran.offsetTop - 90)
-    //     } else {
-    //         window.scroll(0, 0)
-    //     }
-    // }
+    const activeSwap = () => {
+        const deleteActive = document.querySelectorAll(".active")
+        
+        if(window.scrollY > position("form-content")) {
+            deleteActive[0].classList.remove('active')
+            getId('form').classList.add('active')
+        } else if(window.scrollY > position("movielist-content")) {
+            deleteActive[0].classList.remove('active')
+            getId('movielist').classList.add('active')
+        } else {
+            deleteActive[0].classList.remove('active')
+            getId('gamelist').classList.add('active')
+        }
+    }
+
+    window.addEventListener('scroll', activeSwap)
 
     return (
         <>
@@ -27,9 +34,9 @@ const Navbar = () => {
                     </button>
                     <div className="collapse navbar-collapse" id="mobileMenu">
                         <div className="navbar-nav ms-auto">
-                            <Link className="nav-link" activeClass="active" id="gamelist" to="game-list-container" offset={-100} href="/#">Game List</Link>
-                            <Link className="nav-link" activeClass="active" id="movielist" to="movielist-content" offset={-90} smooth={true}>Movie List</Link>
-                            <Link className="nav-link" activeClass="active" id="form" to="form-content" spy={true} smooth={true} offset={-90}>Form List</Link>
+                            <Link className="nav-link active" id="gamelist" to="gamelist-content" offset={-150}>Game List</Link>
+                            <Link className="nav-link" id="movielist" to="movielist-content" offset={-90}>Movie List</Link>
+                            <Link className="nav-link" id="form" to="form-content" offset={-90}>Form List</Link>
                         </div>
                     </div>
                 </div>

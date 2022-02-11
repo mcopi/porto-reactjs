@@ -3,6 +3,7 @@ import GameList from './components/GameList';
 import MovieList from './components/MovieList';
 import Form from './components/Form';
 import { ListProvider } from './ListContext';
+import { Footer } from './components/Footer';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Form />
       </ListProvider>
       
+      <Footer />
     </>
   )
 }

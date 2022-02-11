@@ -1,11 +1,12 @@
 import React, { useEffect, useContext } from 'react';
 import { ListContext } from '../ListContext';
+import { Link } from 'react-scroll';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './list.css';
 
 const MovieList = () => {
 
-    const { listFilm, fetchStatus, setFetchStatus, functions } = useContext(ListContext)
+    const { listFilm, fetchStatus, setFetchStatus, setEdit, setInput, functions } = useContext(ListContext)
     const { fetchFilmList, deleteData, slicedDescription, slicedDate } = functions
 
     useEffect(() => {
@@ -21,6 +22,23 @@ const MovieList = () => {
         let val = parseInt(e.target.value)
 
         deleteData(val)
+    }
+
+    const handleEdit = (e) => {
+        let id = parseInt(e.target.value)
+        const dataEdit = listFilm.find(data => { return data.id === id })
+        // const indexData = listGame.findIndex(data => data.id === id)
+  
+        setEdit(true)
+        setInput({
+            id: dataEdit.id,
+            name: dataEdit.name,
+            year: new Date(dataEdit.year),
+            type: dataEdit.type,
+            genre: dataEdit.genre,
+            imgUrl: dataEdit.imgUrl,
+            desc: dataEdit.desc
+        })
     }
 
     return (
@@ -42,7 +60,9 @@ const MovieList = () => {
                                     <p>{slicedDescription(data.desc)}</p>
                                     <div className="my-3" id="action-button">
                                         <div className="d-inline">
-                                            <button className="btn btn-primary btn-sm me-1 bi bi-pencil"></button>
+                                            <Link to={"form-content"}>
+                                                <button className="btn btn-primary btn-sm me-1 bi bi-pencil" onClick={handleEdit} value={data.id}></button>
+                                            </Link>
                                             <button className="btn btn-danger btn-sm bi bi-trash" onClick={handleDelete} value={data.id}></button>
                                         </div>
                                         <div className="d-inline float-end">

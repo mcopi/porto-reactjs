@@ -1,11 +1,13 @@
 import React, { useEffect, useContext } from 'react';
 import { ListContext } from '../ListContext';
+import { Link } from 'react-scroll';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './list.css';
+import defaultData from '../data/data.json';
 
 const GameList = () => {
 
-    const { listGame, fetchStatus, setFetchStatus, functions } = useContext(ListContext)
+    const { listGame, fetchStatus, setFetchStatus, setInput, setEdit, functions } = useContext(ListContext)
     const { fetchGameList, deleteData, slicedDescription, slicedDate } = functions
 
     useEffect(() => {
@@ -15,14 +17,32 @@ const GameList = () => {
                 setFetchStatus(true)
             }  
         } else {
-            localStorage.setItem('data', '[]')
+            localStorage.setItem('data', JSON.stringify(defaultData))
+            fetchGameList()
         }     
     }, [fetchStatus, fetchGameList, setFetchStatus])
 
     const handleDelete = (e) => {
-        let val = parseInt(e.target.value)
+        let id = parseInt(e.target.value)
 
-        deleteData(val)
+        deleteData(id)
+    }
+
+    const handleEdit = (e) => {
+        let id = parseInt(e.target.value)
+        const dataEdit = listGame.find(data => { return data.id === id })
+        // const indexData = listGame.findIndex(data => data.id === id)
+  
+        setEdit(true)
+        setInput({
+            id: dataEdit.id,
+            name: dataEdit.name,
+            year: new Date(dataEdit.year),
+            type: dataEdit.type,
+            genre: dataEdit.genre,
+            imgUrl: dataEdit.imgUrl,
+            desc: dataEdit.desc
+        })
     }
 
     return (
@@ -32,7 +52,7 @@ const GameList = () => {
                 <h2>Game List</h2>
             </div>
 
-            <div className="row justify-content-md-start justify-content-center">
+            <div className="row justify-content-md-start justify-content-center" id="gamelist-content">
                 {listGame.map((data, index) => {
                     return (
                         <div className="col-10 col-md-3" key={index}>
@@ -44,9 +64,10 @@ const GameList = () => {
                                     <p>{slicedDescription(data.desc)}</p>
                                     <div className="my-3" id="action-button">
                                         <div className="d-inline">
-                                            <button className="btn btn-primary btn-sm me-1 bi bi-pencil"></button>
-                                            <button className="btn btn-danger btn-sm bi bi-trash" onClick={handleDelete} value={data.id}>
-                                            </button>
+                                            <Link to={"form-content"}>
+                                                <button className="btn btn-primary btn-sm me-1 bi bi-pencil" onClick={handleEdit} value={data.id}></button>
+                                            </Link>
+                                            <button className="btn btn-danger btn-sm bi bi-trash" onClick={handleDelete} value={data.id}></button>
                                         </div>
                                         <div className="d-inline float-end">
                                             <button className="btn btn-secondary btn-sm">Read More</button>
