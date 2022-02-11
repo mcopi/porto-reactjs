@@ -64,7 +64,7 @@ const GameList = () => {
                                     <p>{slicedDescription(data.desc)}</p>
                                     <div className="my-3" id="action-button">
                                         <div className="d-inline">
-                                            <Link to={"form-content"}>
+                                            <Link to={"form-content"} offset={-90}>
                                                 <button className="btn btn-primary btn-sm me-1 bi bi-pencil" onClick={handleEdit} value={data.id}></button>
                                             </Link>
                                             <button className="btn btn-danger btn-sm bi bi-trash" onClick={handleDelete} value={data.id}></button>

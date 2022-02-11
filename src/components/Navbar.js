@@ -34,9 +34,9 @@ const Navbar = () => {
                     </button>
                     <div className="collapse navbar-collapse" id="mobileMenu">
                         <div className="navbar-nav ms-auto">
-                            <Link className="nav-link active" id="gamelist" to="gamelist-content" offset={-150}>Game List</Link>
-                            <Link className="nav-link" id="movielist" to="movielist-content" offset={-90}>Movie List</Link>
-                            <Link className="nav-link" id="form" to="form-content" offset={-90}>Form List</Link>
+                            <Link className="nav-link active" id="gamelist" to="gamelist-content" offset={-150} smooth={true} duration={300}>Game List</Link>
+                            <Link className="nav-link" id="movielist" to="movielist-content" offset={-90} smooth={true} duration={300}>Movie List</Link>
+                            <Link className="nav-link" id="form" to="form-content" offset={-90} smooth={true} duration={300}>Form List</Link>
                         </div>
                     </div>
                 </div>
