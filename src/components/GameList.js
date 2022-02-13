@@ -1,12 +1,14 @@
 import React, { useEffect, useContext } from 'react';
 import { ListContext } from '../ListContext';
 import { Link } from 'react-scroll';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './list.css';
 import defaultData from '../data/data.json';
 
 const GameList = () => {
 
+    const navigate = useNavigate()
     const { listGame, fetchStatus, setFetchStatus, setInput, setEdit, functions } = useContext(ListContext)
     const { fetchGameList, deleteData, slicedDescription, slicedDate } = functions
 
@@ -45,6 +47,11 @@ const GameList = () => {
         })
     }
 
+    const handleDetails = (e) => {
+        const idDetail = e.target.value
+        navigate(`/${idDetail}`)
+    }
+
     return (
         <div className="container" id="game-list-container">
 
@@ -70,7 +77,7 @@ const GameList = () => {
                                             <button className="btn btn-danger btn-sm bi bi-trash" onClick={handleDelete} value={data.id}></button>
                                         </div>
                                         <div className="d-inline float-end">
-                                            <button className="btn btn-secondary btn-sm">Read More</button>
+                                            <button className="btn btn-secondary btn-sm" value={data.id} onClick={handleDetails}>Read More</button>
                                         </div>
                                     </div>
                                 </div>
